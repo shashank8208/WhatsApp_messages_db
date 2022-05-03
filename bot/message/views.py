@@ -10,11 +10,15 @@ from django.views.decorators.csrf import csrf_exempt
 
 from . models import WhatsApp_message
 
-url1 = ""
+url1 = "https://13.233.94.160:9090"
+
+################# To get the auth token##########################
 
 def get_token():
-    url = url1 + "/v1/users/login"
-    payload = "{\n\t\"new_password\": \"\"\n}"
+    url = url1+"v1/users/login"
+    payload = json.dumps({
+  "new_password": "Khairnar@123"
+})
     headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Basic '
@@ -30,6 +34,7 @@ def get_token():
 @csrf_exempt
 def message(request):
     if request.method == 'POST':
+        print(request.body)
         body = json.loads(request.body)
         if "messages" in body: 
             wa_id = body["messages"][0]["from"]
@@ -38,15 +43,27 @@ def message(request):
             timestamp = body["messages"][0]["timestamp"]
             msg_type = body["messages"][0]["type"]
             try:
-                msgs = WhatsApp_message(
-                    phone = wa_id,
-                    type = msg_type,
-                    message = msg,
-                    msg_id = msg_id,
-                    timestamp = timestamp
-                )
+                print("Saving in DB")
+                # msgs = WhatsApp_message(
+                #     phone_number = wa_id,
+                #     type = msg_type,
+                #     message = msg,
+                #     msg_id = msg_id,
+                #     timestamp = timestamp
+                # )
+                msgs = WhatsApp_message()
+                msgs.phone_number = wa_id
+                msgs.type = msg_type
+                msgs.message = msg
+                msgs.msg_id = msg_id
+                msgs.timestamp = timestamp
                 msgs.save()
             except Exception as e:
                 print(e)
-    return HttpResponse(status=200)
+        return HttpResponse("YOYO THIS IS POST ",status=200)
+        
+    elif request.method == 'GET':
+        print("YOYO THIS IS GET")
+        return HttpResponse("YOYO THIS IS GET ",status=200)
+
 

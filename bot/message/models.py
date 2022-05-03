@@ -7,4 +7,4 @@ class WhatsApp_message(models.Model):
     type = models.CharField(max_length=30)
     message = models.TextField()
     msg_id = models.CharField( max_length=150)
-    timestamp = models.DateTimeField()
+    timestamp = models.TextField()

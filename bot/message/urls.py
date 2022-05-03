@@ -5,5 +5,7 @@ from django.urls import path
 from message import views
 
 urlpatterns = [
-    path("webhook",views.message),
+    # path("webhook",views.message),
+    path("",views.message),
+
 ]
