@@ -8,3 +8,6 @@ class WhatsApp_message(models.Model):
     message = models.TextField()
     msg_id = models.CharField( max_length=150)
     timestamp = models.TextField()
+
+    def __str__(self):
+        return "%s %s %s" %(self.phone_number, self.message, self.msg_id)
